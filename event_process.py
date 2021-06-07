@@ -9,8 +9,7 @@ from azure.storage.blob import BlobServiceClient, BlobSasPermissions, generate_b
 
     @param account_name: name of the Azure Storage account (can change this parameter in the driver code)
     @param container_name: string name of container (can change this parameter in the driver code)
-    @return URL of the most recently uploaded blob to the storage container with the SAS token at the end
-    @return name of the blob that was most recently updated/uploaded
+    @return dictionary that has name of the blob as a key, and SAS URL of the blob as the value
 """
 def retrieve_blob(account_name, container_name):
     # Instantiate a BlobServiceClient using a connection string
@@ -22,7 +21,7 @@ def retrieve_blob(account_name, container_name):
     last_date = utc.localize(datetime(2021, 6, 1))
     blob_name_date_dictionary = dict()
     for blob in container_client.list_blobs():
-        if blob.last_modified < last_date:
+        if blob.last_modified > last_date:
             blob_name_date_dictionary[blob.name] = generate_sas(account_name, container_name, blob.name)
     
     # Write the name of the blob file to blob_list.txt
@@ -35,6 +34,7 @@ def retrieve_blob(account_name, container_name):
                 file.write(blob_name)
                 file.write("\n")
     
+    return blob_name_date_dictionary
 
 """
     Generates the SAS token that needs to be at the end of a blob storage URL for download.
@@ -45,7 +45,6 @@ def retrieve_blob(account_name, container_name):
     @return URL of the most recently uploaded blob to the storage container with the SAS token at the end
 """
 def generate_sas(account_name, container_name, blob_name):
-    # Generate SAS token to place at the end of the URL of the last uploaded (modified) blob on the container
     sas = generate_blob_sas(account_name = account_name, 
                     account_key = key.KEY_1, 
                     container_name = container_name,
@@ -55,12 +54,19 @@ def generate_sas(account_name, container_name, blob_name):
     sas_url = 'https://' + account_name + '.blob.core.usgovcloudapi.net/' + container_name + '/' + blob_name + '?' + sas
     return sas_url
 
+"""
+    Run the clustering and analysis process on the blob.
+"""
 def run_process():
+    return
+
+"""
+    Once the blob has been processed, remove it from the list.
+"""
+def delete_blob_from_list():
     return
 
 if __name__ == "__main__":
     storage_account = key.STORAGE_ACCOUNT
     container_name = key.CONTAINER_NAME
-
-    # Access contents of the Azure Blob Storage
-    retrieve_blob(storage_account, container_name)
+    blob_name_date_dictionary = retrieve_blob(storage_account, container_name)
