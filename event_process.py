@@ -24,6 +24,18 @@ def retrieve_blob(account_name, container_name):
         if blob.last_modified > last_date:
             blob_name_date_dictionary[blob.name] = generate_sas(account_name, container_name, blob.name)
     
+    # Check to see if blob file has already been processed by checking the processed file list text
+    with open ('processed_blobs.txt', 'r+') as file:
+        for blob_name in blob_name_date_dictionary.keys():
+            for line in file:
+                if blob_name in line:
+                    try:
+                        # Remove element from dictionary because it has already been processed
+                        del blob_name_date_dictionary[blob_name]
+                    except KeyError:
+                        print(blob_name + " was not in the list of blobs to be processed.")
+                        pass
+    
     # Write the name of the blob file to blob_list.txt
     with open('blob_list.txt', 'r+') as file:
         for blob_name in blob_name_date_dictionary.keys():
@@ -61,9 +73,12 @@ def run_process():
     return
 
 """
-    Once the blob has been processed, remove it from the list.
+    Once the blob has been processed, remove it from the unprocessed blob list. Add the name of the blob file to the list
+    of processed files.
+
+    @param blob_name: name of the blob file that needs to removed from unprocessed blob list to processed file list
 """
-def delete_blob_from_list():
+def delete_blob_from_list(blob_name):
     return
 
 if __name__ == "__main__":
