@@ -51,8 +51,8 @@ def retrieve_blob(account_name, container_name):
 """
     Generates the SAS token that needs to be at the end of a blob storage URL for download.
 
-    @param account_name: name of the Azure Storage account (can change this parameter in the driver code)
-    @param container_name: string name of container (can change this parameter in the driver code)
+    @param account_name: name of the Azure Storage account
+    @param container_name: string name of container
     @param blob_name: name of blob that needs to be downloaded
     @return URL of the most recently uploaded blob to the storage container with the SAS token at the end
 """
