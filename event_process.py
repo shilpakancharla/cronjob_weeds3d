@@ -24,6 +24,17 @@ def retrieve_blob(account_name, container_name):
     for blob in container_client.list_blobs():
         if blob.last_modified < last_date:
             blob_name_date_dictionary[blob.name] = generate_sas(account_name, container_name, blob.name)
+    
+    # Write the name of the blob file to blob_list.txt
+    with open('blob_list.txt', 'r+') as file:
+        for blob_name in blob_name_date_dictionary.keys():
+            for line in file:
+                if blob_name in line: # If the name of the blob already exists in the file, do not write it
+                    break
+            else:
+                file.write(blob_name)
+                file.write("\n")
+    
 
 """
     Generates the SAS token that needs to be at the end of a blob storage URL for download.
@@ -48,8 +59,8 @@ def run_process():
     return
 
 if __name__ == "__main__":
-    STORAGE_ACCOUNT = 'weedsmedia'
-    CONTAINER_NAME = 'weeds3d'
+    storage_account = key.STORAGE_ACCOUNT
+    container_name = key.CONTAINER_NAME
 
     # Access contents of the Azure Blob Storage
-    retrieve_blob(STORAGE_ACCOUNT, CONTAINER_NAME)
+    retrieve_blob(storage_account, container_name)
