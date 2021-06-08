@@ -9,7 +9,13 @@ import pandas as pd
 def run_process(blob_name, src, dest):
     # Copy the blob into the appropriate folder
 
-    return
+    # Once process is finished running, add blob_name to processed_blobs.txt
+    with open("processed_blobs.txt", "w") as file:
+        file.write(blob_name)
+        file.write("\n")
+    
+    # Remove blob name from blob_list.txt
+    delete_blob_from_list(blob_name)
 
 """
     Once the blob has been processed, remove it from the unprocessed blob list. Add the name of the blob file to the list
@@ -18,7 +24,14 @@ def run_process(blob_name, src, dest):
     @param blob_name: name of the blob file that needs to removed from unprocessed blob list to processed file list
 """
 def delete_blob_from_list(blob_name):
-    return
+    blob_file = open("blob_list.txt", "r")
+    lines = blob_file.readlines()
+    blob_file.close()
+
+    new_blob_file = open("blob_list.txt", "w")
+    for line in lines:
+        if line.strip("\n") != blob_name:
+            new_blob_file.write(line)
 
 if __name__ == "__main__":
     # Get the blob at the top of the blob_list.txt

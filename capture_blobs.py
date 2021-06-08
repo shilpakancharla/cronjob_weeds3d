@@ -70,7 +70,7 @@ def generate_sas(account_name, container_name, blob_name):
 """
     Convert dictionary to .csv file that contains name of blob and URL for download.
 
-    @param blob_dictionary: 
+    @param blob_dictionary: dictionary with blob names and SAS URLs
 """
 def dict_to_csv(blob_dictionary):
     with open('blobs.csv', 'w') as file:
