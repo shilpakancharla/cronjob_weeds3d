@@ -5,9 +5,15 @@ import pandas as pd
     Run the clustering and analysis process on the blob.
 
     @param blob_name: name of the blob file that needs to removed from unprocessed blob list to processed file list
+    @param src: source of blob added to container
+    @param dest: where the blob should be copied to
 """
 def run_process(blob_name, src, dest):
     # Copy the blob into the appropriate folder
+    subprocess.call('sudo azcopy copy ' + "\"" + src + "\"" + " " + "\"" + dest + blob_name + "\"" + " --recursive", 
+                    shell = True)
+    
+    # Run the bash script
 
     # Once process is finished running, add blob_name to processed_blobs.txt
     with open("processed_blobs.txt", "w") as file:
